@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="main-body">
+            <button id="clear">clear</button>
+            <div id="pantalla">
+                <h1>0</h1>
+            </div>
+            <div id="buttons">
+                    <div data-value="7" data-oper="0"class="number botones"><p>7</p></div>
+                    <div data-value="8"data-oper="0"class="number botones"><p>8</p></div>
+                    <div data-value="9"data-oper="0"class="number botones"><p>9</p></div>
+                    <div data-value="-"data-oper="2"class="operator botones"><p>-</p></div>
+                    <div data-value="/"data-oper="4"class="operator botones"><p>/</p></div>
+                    <div data-value="4"data-oper="0"class="number botones"><p>4</p></div>
+                    <div data-value="5"data-oper="0"class="number botones"><p>5</p></div>
+                    <div data-value="6"data-oper="0"class="number botones"><p>6</p></div>
+                    <div data-value="+"data-oper="1"class="operator botones"><p>+</p></div>
+                    <div data-value="*"data-oper="3"class="operator botones"><p>*</p></div>
+                    <div data-value="1"data-oper="0"class="number botones"><p>1</p></div>
+                    <div data-value="2"data-oper="0"class="number botones"><p>2</p></div>
+                    <div data-value="3"data-oper="0"class="number botones"><p>3</p></div>
+                    <div data-value="0"data-oper="0"class="number botones"><p>0</p></div>
+                    <div data-value="="data-oper="0"class="operator botones"><p>=</p></div>
+            </div>
+            
+
+
+        </div>
+        
+    </body>
+    <footer><h5>Jorge Capellan -- Insta:</h5><a href="https://www.instagram.com/jorge_cape00/" target="_blank">jorge_cape00</a></footer>
+</html>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    html{
+        height: 100vh;
+    }
+    footer{
+        height: 30px;
+        background-color: #A2928B;
+        bottom: 0;
+        position: absolute;
+        width: 100vw;
+        max-width: 100vw;
+        display: flex;
+        align-content: flex-end;
+        text-align: end;
+        flex-direction: row;
+        justify-content: center;
+    }
+    body{
+        background-color: white;
+        height: 100vh;
+        max-height: 100vh;
+    }
+    #main-body{
+        position: absolute;
+        position: relative;
+        height: 80vh;
+        width: 70vh;
+        background: linear-gradient(30deg, #183E4E, #44778c);
+        margin: auto;
+        top: 50%;
+        transform: translateY(-50%);
+        border-style: solid;
+        border-width: 5px;
+        border-radius: 20px;
+        box-shadow: 10px 10px black;
+    }
+    #buttons{
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        bottom: 0px;
+        height: 50%;
+        width: 70%;
+        position: absolute;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        background-color: brown;
+    }
+    .fila{
+        display: table-row;
+    }
+    .number, .operator{
+        background-color: burlywood;
+        display: flex;
+        outline: 3px solid #A5624D;
+        transition: 0.3s;
+
+    }
+    .number:hover{
+        background-color: brown;
+    }
+    .operator:hover{
+        background-color: cornflowerblue;
+    }
+    p{
+        margin: auto;
+        vertical-align: middle;
+    }
+    #pantalla{
+        position: absolute;
+        top: 20%;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        margin: auto;
+        height: 15%;
+        width: 70%;
+        background: linear-gradient(30deg, #5AA8B5, #86adb4);
+        border-style: solid;
+        border-width: 8px;
+    }
+    a{
+        color: black;
+        text-decoration: none;
+    }
+    a:hover{
+        color:grey;
+    }
+    h1{
+        margin: 7%;
+        text-align: center;
+    }
+    #clear{
+        position: fixed;
+        display: block;
+        top: 5%;
+        right: 5%;
+    }
+    @media (min-width: 100px) and (max-width: 900px) {
+        #main-body{
+            width: 80vw;
+            height: 60vh;
+        }
+  /* CSS */
+  
+}
+</style>
+<script>
+    // variables globales
+    var operacion = "";
+    let number1 = "";
+    let number2 = "";
+    let resultado = false;
+    var oper = 0;
+    let primero = true;
+
+    // referencia a elementos
+    var botones = document.querySelectorAll(".botones");
+    var parent = document.querySelector("#buttons");
+    var display = document.querySelector("h1");
+    var clear = document.querySelector("#clear");
+
+    clear.onclick = function(){
+        operacion = "0";
+        number1 = "";
+        number2 = "";
+        resultado = false;
+        oper = 0;
+        primero = true;
+        display.textContent = operacion;
+    };
+    
+    // toma de tamaño del div de botones
+    parentWidth = parent.clientWidth;
+    parentHeight = parent.clientHeight;
+
+    // recorrido que cambia los tamaños de los botones
+    botones.forEach(function(item){
+        item.style.width = (parentWidth / 5);
+        item.style.height = (parentHeight / 3);
+        item.onclick = function(){
+            if(resultado == true){
+                number1 = operacion.toString();
+                resultado = false;
+                primero = true;
+                operacion = number1;
+                number2 = "";
+            }
+            if(item.dataset.value == "=" && primero == false){
+                aplicar(number1, number2, oper);
+            }else if(primero && item.dataset.oper != 0){
+                primero = false;
+                oper = item.dataset.oper;
+                console.log(oper)
+                operacion += item.dataset.value;
+            }else if(primero && item.dataset.oper == 0){
+                number1 += item.dataset.value;
+                operacion += item.dataset.value;
+            }else if(primero == false && item.dataset.oper == 0){
+                number2 += item.dataset.value;
+                operacion += item.dataset.value;
+            }else{
+                operacion = "error";
+            }
+
+            
+            console.log(number1, number2, operacion);
+            display.textContent = operacion;
+            
+            
+        };
+    });
+    function aplicar(num1, num2, oper){
+        switch(oper){
+            case "1":
+                operacion = parseInt(num1) + parseInt(num2);
+                console.log(operacion);
+                resultado = true;
+                break;
+            case "2":
+                operacion = parseInt(num1) - parseInt(num2);
+                console.log(operacion);
+                resultado = true;
+                break;
+            case "3":
+                operacion = parseInt(num1) * parseInt(num2);
+                console.log(operacion);
+                resultado = true;
+                break;
+            case "4":
+                operacion = parseInt(num1) / parseInt(num2);
+                console.log(operacion);
+                resultado = true;
+                break;
+        }
+    }
+
+
+</script>
